@@ -1,21 +1,24 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const redis = require('redis');
-const { v4: uuidv4 } = require('uuid');
+import express from 'express';
+import mongoose from 'mongoose';
+import { createClient } from 'redis';
+import { v4 as uuidv4 } from 'uuid';
 
 const app = express();
 app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
+const REDIS_HOST = process.env.REDIS_HOST || 'localhost';
+const REDIS_PORT = process.env.REDIS_PORT || 6379;
 
-const redisClient = redis.createClient({
-    url: `redis://${process.env.REDIS_HOST || 'localhost'}:${process.env.REDIS_PORT || 6379}`
+const redisClient = createClient({
+    url: `redis://${REDIS_HOST}:${REDIS_PORT}`
 });
 redisClient.on('error', (err) => console.error("Redis Error", err));
 redisClient.connect().catch(err => console.error("Redis Connection Error", err));
 
-
-const mongoUrl = `mongodb://${process.env.MONGO_HOST || 'localhost'}:${process.env.MONGO_PORT || 27017}/task_db`;
+const MONGO_HOST = process.env.MONGO_HOST || 'localhost';
+const MONGO_PORT = process.env.MONGO_PORT || 27017;
+const mongoUrl = `mongodb://${MONGO_HOST}:${MONGO_PORT}/task_db`;
 await mongoose.connect(mongoUrl);
 
 const TaskSchema = new mongoose.Schema({
@@ -29,7 +32,7 @@ const TaskSchema = new mongoose.Schema({
 
 const Task = mongoose.model('Task', TaskSchema);
 
-const API_BASE = '/api/node/v1/taks';
+const API_BASE = '/api/node/v1/tasks';
 
 app.post(API_BASE, async (req, res) => {
     try {
