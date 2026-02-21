@@ -1,0 +1,15 @@
+{
+  "name": "task-service-node",
+  "version": "1.0.0",
+  "description": "Task Service Node server for polyglot task management project",
+  "main": "index.js",
+  "type": "module",
+  "author": "Skanda Kumar Srikanta",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "mongoose": "^8.3.0",
+    "redis": "^4.6.13",
+    "uuid": "^9.0.1"
+  }
+}
